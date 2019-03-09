@@ -1,0 +1,60 @@
+#k means algorithm 
+
+plot(x = iris$Petal.Length, y = iris$Petal.Width, 
+     xlab = "Petal Length", ylab = "Petal Width")
+
+#below we split this into 2 groups. The algo looks at these random points and 
+#measures the distance from actual data points to new random points. 
+#then it moves the test points closer to minimize the distance and reduce 
+#distance into groupings
+
+data = data.frame(iris$Petal.Length, iris$Petal.Width)
+
+iris.kmeans <- kmeans(data, 2)
+
+plot(x = iris$Petal.Length, y = iris$Petal.Width, pch = iris.kmeans$cluster, 
+     xlab = "Petal Length", ylab = "Petal Width")
+
+#this gives us a decent split but there is an outlier triangle shaped data point 
+# at 3,1.5... Let's try the same thing as above but with 3 categories
+
+iris.kmeans3 <- kmeans(data, 3)
+
+#let's take a look at our plot
+plot (x = iris$Petal.Length, y = iris$Petal.Width, pch = iris.kmeans3$cluster, 
+      xlab = "Petal Length", ylab = "Petal Width")
+
+#below shows the center of the categories
+points(iris.kmeans3$centers, pch = 8, cex = 2)
+
+#knowing how many clusters isn't covered here, but if you get too granular
+#every flower would be it's own category so you have to makea  cutoff at some
+#point and understand domain information about flowers. Some variation is normal
+
+#now let's test how well our prediction works. Note this is supervised learning. 
+
+par(mfrow = c(1, 2))
+
+plot (x = iris$Petal.Length, y = iris$Petal.Width, 
+      pch = iris.kmeans3$cluster, 
+      xlab = "Petal Length", ylab = "Petal Width", main = "Model Output")
+
+plot (x = iris$Petal.Length, y = iris$Petal.Width, 
+      pch = as.integer(iris$Species), 
+      xlab = "Petal Length", ylab = "Petal Width", main = "Actual Data")
+
+#The above creates 2 plots to compare the model vs the actual known data. 
+#it's ok if the graphs have different symbols in the model vs actual. 
+#for example the plusses and triangles may be flipped, the important part is 
+#that it's parsing them out in the model 
+#in a similar way that it is on the actual data. 
+
+#Now let's look at this in a crosstab format, also called a confusion matrix. 
+
+table(iris.kmeans3$cluster, iris$Species)
+
+#when looking at the output of this confusion matrix, if our model 
+# was 100% accurate, you would expect all of the values to be in 
+#just one column, as they are with the setosa column. 
+# The small numbers like the 2 in row 2 under versicolor are errors. 
+#for an introduction, this is a pretty good classifier. 
