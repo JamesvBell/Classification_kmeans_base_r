@@ -1,0 +1,26 @@
+#Pro Tip: If you have leftover objects, here is how to clear them
+rm(list = ls())
+
+
+#Take data that has no categories and group them with kmeans
+
+x <- rbind(matrix(rnorm(100, sd = 0.3), ncol = 2), 
+      matrix(rnorm(100, mean = 1, sd = 0.3), ncol = 2))
+           
+colnames(x) <-  c("x", "y")
+
+
+#let's take a look at this in a plot
+plot(x)
+
+
+#let's split it into 2 groups
+cl <-  kmeans(x, 2)
+
+#Now let's look at our 2 groups
+
+#let's print out the center's of our 2 groups. Whichever center a new point is
+#closest to will determine which group a new data point belongs to. 
+
+cl[2]
+plot(x, pch = cl$cluster)
